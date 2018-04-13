@@ -60,6 +60,6 @@ public class Task {
     public String toString() {
         return (urgent ? "URGENT! " : " ") +
                 text +
-                ", completed= " + (completed ? "completed" : "not completed");
+                ", completed? " + (completed ? "DONE!" : "not completed");
     }
 }

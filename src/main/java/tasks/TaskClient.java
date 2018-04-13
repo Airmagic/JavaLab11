@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public class TaskClient {
     
-    private static final String URL = "http://127.0.0.1:8080/";
+    private static final String URL = "http://127.0.0.1:8080/";   // Replace with your own URL, if different
     
     public static void getAllTasks(TaskGUI gui) {
     
@@ -24,13 +24,15 @@ public class TaskClient {
 
                     @Override
                     public void completed(HttpResponse<Task[]> httpResponse) {
-                        //System.out.println("Response= " + Arrays.toString(httpResponse.getBody()));
-                        gui.tasksUpdated(httpResponse.getBody());
+                        System.out.println("all tasks response " + Arrays.toString(httpResponse.getBody()));
+                        gui.newTaskList(httpResponse.getBody());
                     }
     
                     @Override
                     public void failed(UnirestException e) {
                         System.out.println(e);
+                        gui.taskError(e);
+    
                     }
     
                     @Override
@@ -42,7 +44,7 @@ public class TaskClient {
     }
     
     
-    public static void addTask(Task task) {
+    public static void addTask(TaskGUI gui, Task task) {
     
         Unirest.post(URL + "add")
                 .header("Content-Type", "application/json")
@@ -51,11 +53,14 @@ public class TaskClient {
                     @Override
                     public void completed(HttpResponse<JsonNode> httpResponse) {
                         System.out.println("add response " + httpResponse.getStatus()); // hopefully 201, should check
+                        gui.tasksUpdated();
                     }
     
                     @Override
                     public void failed(UnirestException e) {
-                        System.out.println(e);
+                        System.out.println("Add task " + e);
+                        gui.taskError(e);
+    
                     }
     
                     @Override
@@ -63,16 +68,62 @@ public class TaskClient {
                         System.out.println("Cancelled");
                     }
                 });
-    
-    
     }
     
-    public static void updateTask(Task task) {
+    
+    public static void updateTask(TaskGUI gui, Task task) {
         System.out.println("Update - Implement me!");
+        
+        Unirest.patch(URL + "completed")
+                .header("Content-Type", "application/json")
+                .body(task)
+                .asJsonAsync(new Callback<JsonNode>() {
+                    @Override
+                    public void completed(HttpResponse<JsonNode> httpResponse) {
+                        System.out.println("completed response " + httpResponse.getStatus()); // hopefully 201, should check
+                        gui.tasksUpdated();
+                    }
+    
+                    @Override
+                    public void failed(UnirestException e) {
+                        System.out.println("completed " + e);
+                        gui.taskError(e);
+    
+                    }
+    
+                    @Override
+                    public void cancelled() {
+                        System.out.println("Completed cancelled");
+                    }
+                });
     }
     
     
-    public static void deleteTask(Task task) {
+    public static void deleteTask(TaskGUI gui, Task task) {
         System.out.println("Delete - implement me!");
+    
+        Unirest.delete(URL + "delete")
+                .header("Content-Type", "application/json")
+                .body(task)
+                .asJsonAsync(new Callback<JsonNode>() {
+                    @Override
+                    public void completed(HttpResponse<JsonNode> httpResponse) {
+                        System.out.println("completed response " + httpResponse.getStatus()); // hopefully 201, should check
+                        gui.tasksUpdated();
+                    }
+                
+                    @Override
+                    public void failed(UnirestException e) {
+                        System.err.println("delete " + e);
+                        gui.taskError(e);
+                    }
+                
+                    @Override
+                    public void cancelled() {
+                        System.out.println("Delete cancelled");
+                    }
+                });
     }
 }
+
+
