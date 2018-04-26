@@ -25,7 +25,8 @@ public class Config {
                     return jacksonObjectMapper.readValue(s, aClass);
                 } catch (IOException e) {
                     System.err.println(e);
-                    throw new RuntimeException(e);  // todo improve error handling
+                    return readValue("File Error", aClass);
+//                    throw new RuntimeException(e);  // todo improve error handling
                 }
             }
     
@@ -35,7 +36,8 @@ public class Config {
                     return jacksonObjectMapper.writeValueAsString(o);
                 } catch(JsonProcessingException e) {
                     System.err.println(e);
-                    throw new RuntimeException(e);  //todo improve error handling
+                    return "Json problem: "+ e;
+//                    throw new RuntimeException(e);  //todo improve error handling
                 }
 //                catch(Exception e){
 //                    System.out.println("Error "+e+" happened");
