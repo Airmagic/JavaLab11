@@ -25,6 +25,8 @@ public class Config {
                     return jacksonObjectMapper.readValue(s, aClass);
                 } catch (IOException e) {
                     System.err.println(e);
+//                    The function is looking for something ot be returned
+//                    my exception handler returns just a file error string
                     return readValue("File Error", aClass);
 //                    throw new RuntimeException(e);  // todo improve error handling
                 }
@@ -36,13 +38,10 @@ public class Config {
                     return jacksonObjectMapper.writeValueAsString(o);
                 } catch(JsonProcessingException e) {
                     System.err.println(e);
+//                    this returns a string saying there is a problem and the error
                     return "Json problem: "+ e;
 //                    throw new RuntimeException(e);  //todo improve error handling
                 }
-//                catch(Exception e){
-//                    System.out.println("Error "+e+" happened");
-//                    return e;
-//                }
             }
         });
     }

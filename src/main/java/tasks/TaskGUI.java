@@ -110,7 +110,7 @@ public class TaskGUI extends JFrame{
         taskList.setEnabled(enabled);
     }
     
-    
+//    This function sets the gui to false and sends to taskclient getall task
     private void getAllTasks() {
         enableGUI(false);
         TaskClient.getAllTasks(this);
@@ -144,6 +144,7 @@ public class TaskGUI extends JFrame{
 
         } catch (Exception e) {
             System.out.println(e);
+            enableGUI(true);
         }
     }
 
@@ -151,18 +152,25 @@ public class TaskGUI extends JFrame{
         enableGUI(false);
         try {
             Task task = listModel.elementAt(rightClickTaskIndex);
-            if (task != null)  { TaskClient.urgentTask(this, task); }
+            if (task != null)  {
+                task.setUrgent(!task.isUrgent());
+                TaskClient.urgentTask(this, task);
+            }
 
         } catch (Exception e) {
             System.out.println(e);
+            enableGUI(true);
         }
     }
-    
+
+//    This goes to the function to get all task
     protected void tasksUpdated() {
         getAllTasks();
+        enableGUI(true);
     }
     
-    
+
+
     protected void newTaskList(Task[] tasks) {
     
         System.out.println(tasks.length + " NEW TASKS");
@@ -175,7 +183,6 @@ public class TaskGUI extends JFrame{
                     listModel.addElement(t);
                 }
                 taskList.setModel(listModel);
-    
                 enableGUI(true);
             }
         });

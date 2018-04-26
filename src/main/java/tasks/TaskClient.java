@@ -89,6 +89,7 @@ public class TaskClient {
                     public void completed(HttpResponse<JsonNode> httpResponse) {
                         System.out.println("completed response " + httpResponse.getStatus()); // hopefully 201, should check
                         gui.tasksUpdated();
+
                     }
     
                     @Override
