@@ -24,7 +24,8 @@ public class TaskGUI extends JFrame{
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         pack();
         setVisible(true);
-        
+
+//        This is the button for adding task to the list
         addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 addNewTask();
@@ -56,6 +57,7 @@ public class TaskGUI extends JFrame{
         // Create pop-up menu, with one menu item.
         JPopupMenu rightClickMenu = new JPopupMenu();
         JMenuItem deleteTask = new JMenuItem("Delete");
+        JMenuItem urgentTask = new JMenuItem("Urgent");
         
         // Add the action listener for clicking on the Delete menu option.
         deleteTask.addActionListener(new ActionListener() {
@@ -63,10 +65,12 @@ public class TaskGUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 taskList.setSelectedIndex(e.getID());
                 deleteTask();
+                urgentTask();
             }
         });
     
         rightClickMenu.add(deleteTask);
+        rightClickMenu.add(urgentTask);
         
         taskList.setComponentPopupMenu(rightClickMenu);
     
@@ -142,7 +146,17 @@ public class TaskGUI extends JFrame{
             System.out.println(e);
         }
     }
-    
+
+    private void urgentTask() {
+        enableGUI(false);
+        try {
+            Task task = listModel.elementAt(rightClickTaskIndex);
+            if (task != null)  { TaskClient.urgentTask(this, task); }
+
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+    }
     
     protected void tasksUpdated() {
         getAllTasks();

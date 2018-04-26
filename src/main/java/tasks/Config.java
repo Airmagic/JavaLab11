@@ -37,6 +37,10 @@ public class Config {
                     System.err.println(e);
                     throw new RuntimeException(e);  //todo improve error handling
                 }
+//                catch(Exception e){
+//                    System.out.println("Error "+e+" happened");
+//                    return e;
+//                }
             }
         });
     }
