@@ -65,7 +65,16 @@ public class TaskGUI extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 taskList.setSelectedIndex(e.getID());
                 deleteTask();
-                urgentTask();
+            }
+        });
+
+        urgentTask.addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    taskList.setSelectedIndex(e.getID());
+                    urgentTask();
+
             }
         });
     
@@ -86,7 +95,8 @@ public class TaskGUI extends JFrame{
             public void mousePressed(MouseEvent e) {
             
             }
-        
+
+
             @Override
             public void mouseReleased(MouseEvent e) {
             
@@ -150,23 +160,16 @@ public class TaskGUI extends JFrame{
 
     private void urgentTask() {
         enableGUI(false);
-        try {
-            Task task = listModel.elementAt(rightClickTaskIndex);
-            if (task != null)  {
-                task.setUrgent(!task.isUrgent());
-                TaskClient.urgentTask(this, task);
-            }
-
-        } catch (Exception e) {
-            System.out.println(e);
-            enableGUI(true);
+        Task task = listModel.elementAt(rightClickTaskIndex);
+        if (task != null) {
+            task.setUrgent(!task.isUrgent());
+            TaskClient.urgentTask(this, task);
         }
     }
 
 //    This goes to the function to get all task
     protected void tasksUpdated() {
         getAllTasks();
-        enableGUI(true);
     }
     
 

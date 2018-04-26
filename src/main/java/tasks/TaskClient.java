@@ -136,7 +136,7 @@ public class TaskClient {
     public static void urgentTask(TaskGUI gui, Task task) {
         System.out.println("Urgent - implement me!");
 
-        Unirest.delete(URL + "Urgent")
+        Unirest.patch(URL + "urgent")
                 .header("Content-Type", "application/json")
                 .body(task)
                 .asJsonAsync(new Callback<JsonNode>() {
